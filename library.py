@@ -48,7 +48,26 @@ while option != "q":
     if option == "2":
         print("Searching for a book by title...")
         # TODO - Search for a book by title
-
+        title_search = input("Which title are you looking for?\n")
+        # The Library is a dictionary containing two keys, the second of which is a list which in turn contains a list of dictionaries.
+        # Each of these sub-dictionaries consists of a book author and title.
+        # Here, we only want to search the titles specifically, so let's pull the list of titles out into a new list first:
+        titles = []
+        for book in library["books"]:
+            titles.append(book["title"])
+        # Then, let's make another list containing the search results. List comprehension helps with this.
+        # I want a success message if there have been any matches, and a failure message if there are none, so I'll also use an if/else.
+        # So that case matching doesn't matter, I'll casefold both the search query and the "if" condition.
+        # Also, it would be a pretty bad search engine if it required an exact and complete match of the user input
+        # (i.e. the entire title entered exactly as it appears in the library's system), so I'll use the string method "__contains__".
+        title_results = [title for title in titles if title.casefold().__contains__(title_search.casefold())]
+        if title_results != []:
+            print("The following title matches were found:")
+            for title_result in title_results:
+                print(title_result)
+        else:
+            print("Sorry, it doesn't look like we have that at the moment. Our selection is updated periodically, so please check back later!")
+        print()
 
     if option == "3":
         print("Adding a book...")
