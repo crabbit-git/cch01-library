@@ -25,6 +25,7 @@ library = {
 }
 
 # TODO - Print welcome statement including library name
+print("Welcome to " + library["name"] + "!\n")
 
 option = ""
 while option != "q":
@@ -40,10 +41,14 @@ while option != "q":
     if option == "1":
         print("Listing all books...")
         # TODO - List all books
+        for book in library["books"]:
+            print(book["title"], "by", book["author"])
+        print() # This just prints a blank line outside of the for loop for better spacing in the terminal output
 
     if option == "2":
         print("Searching for a book by title...")
         # TODO - Search for a book by title
+
 
     if option == "3":
         print("Adding a book...")
