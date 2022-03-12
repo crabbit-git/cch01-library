@@ -2,11 +2,11 @@ library = {
     "name": "CodeClan Library",
     "books": [
         {
-            "author": "George RR Martin",
+            "author": "George R. R. Martin",
             "title": "A Song of Ice and Fire"
         },
         {
-            "author": "J R. R. Tolkien",
+            "author": "J. R. R. Tolkien",
             "title": "The Hobbit"
         },
         {
@@ -39,6 +39,7 @@ def title_search():
     # Also, it would be a pretty bad search engine if it required an exact and complete match of the user input
     # (i.e. the entire title entered exactly as it appears in the library's system), so I'll use the string method "__contains__".
     title_results = [title for title in titles if title.casefold().__contains__(title_search.casefold())]
+    book_results = []
     if title_results != []:
         print("\nThe following title matches were found:\n")
         for title_result in title_results:
@@ -51,12 +52,36 @@ def title_search():
             for book in library["books"]:
                 if title_result == book["title"]:
                     print(book["title"], "by", book["author"])
+                    book_results.append(book)
         print()
     else:
-        print("Sorry, it doesn't look like we have that at the moment. Our selection is updated periodically, so please check back later!\n")
+        print("\nSorry, it doesn't look like we have that at the moment. Our selection is updated periodically, so please check back later!\n")
+    return book_results
+
+def remove_book():
+    search_results = title_search()
+    no_changes_made = "The library has not been modified. Returning to the main menu.\n"
+    # I want to make sure that only the specific book the user wants rid of is deleted, so I want to check if the search results
+    # exceed one book (since we're deleting only one book from the library).
+    if len(search_results) > 1:
+        print("More than one book matches your search query. Please try a more specific query.\n")
+        print(no_changes_made)
+    elif len(search_results) == 1:
+        confirm_match = input("Is this what you'd like to remove? Type \"DELETE\" to confirm deletion, or anything else to go back to the main menu.\n")
+        for search_result in search_results:
+            if confirm_match == "CONFIRM":
+                index_to_remove = library["books"].index(search_result)
+                removed_book = library["books"].pop(index_to_remove)
+                print("\n" + removed_book["title"], "by", removed_book["author"], "has been removed from the library.\n")
+            else:
+                print("\nDeletion cancelled.\n")
+                print(no_changes_made)
+    else:
+        print(no_changes_made)
+    return
+
 # TODO - Print welcome statement including library name
 print("Welcome to " + library["name"] + "!\n")
-
 option = ""
 while option != "q":
     print("Options:")
@@ -86,7 +111,7 @@ while option != "q":
         title_search()
 
     if option == "3":
-        print("Adding a book...")
+        print("Adding a book...\n")
         # TODO - Add a book
         # First off, we need two user inputs: the author and the title.
         add_author = input("Please enter the author of the book you would like to add:\n")
@@ -106,16 +131,13 @@ while option != "q":
     if option == "4":
         print("Removing a book...\n")
         # TODO - Remove a book
-        # We could do this by index, but that'd be kind of a weird way of writing a program like this if it were to be used IRL.
+        # We could do this by index directly, but that'd be kind of a weird way of writing a program like this if it were to be used IRL.
         # It's probably better to use the search function from before.
         # This is the main reason I have defined the search code as a function rather than leaving it hardcoded to option 2:
-        # otherwise, I'd have to repeat the same code again below.
-        title_search()
-        # I want to make sure that only the specific book the user wants rid of is deleted, so I want to check if the search results
-        # exceed one list item. However, I'm struggling to get this to work. I thought I could just get the search function to return
-        # "title_results", but it seems not to work and I'm not yet sure why. I'll comment this bit out for now.
-        # if len(title_results) > 1:
-            # print("More than one book matches your search query. Please try a more specific query.\n")
+        # otherwise, I'd have to repeat the search code again below.
+        # I made the book deletion code a function as well.
+        remove_book()
+
         # In case the user couldn't remember the book title but knew the author, I would ideally like to also add an author search too.
 
     if option == "5":
