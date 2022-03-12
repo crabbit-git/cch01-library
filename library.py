@@ -36,17 +36,17 @@ while option != "q":
     print("4 - Remove a book")
     print("5 - Update a book")
     print("q - Quit")
-    option = input("What would you like to do? \n")
+    option = input("\nWhat would you like to do?\n")
 
     if option == "1":
-        print("Listing all books...")
+        print("Listing all books...\n")
         # TODO - List all books
         for book in library["books"]:
             print(book["title"], "by", book["author"])
         print() # This just prints a blank line outside of the for loop for better spacing in the terminal output
 
     if option == "2":
-        print("Searching for a book by title...")
+        print("Searching for a book by title...\n")
         # TODO - Search for a book by title
         title_search = input("Which title are you looking for?\n")
         # The Library is a dictionary containing two keys, the second of which is a list which in turn contains a list of dictionaries.
@@ -62,7 +62,7 @@ while option != "q":
         # (i.e. the entire title entered exactly as it appears in the library's system), so I'll use the string method "__contains__".
         title_results = [title for title in titles if title.casefold().__contains__(title_search.casefold())]
         if title_results != []:
-            print("The following title matches were found:")
+            print("\nThe following title matches were found:\n")
             for title_result in title_results:
                 # print(title_result)
                 # ... prints only the titles, not the authors, so I want to search the original dictionary for the search results instead
@@ -80,6 +80,20 @@ while option != "q":
     if option == "3":
         print("Adding a book...")
         # TODO - Add a book
+        # First off, we need two user inputs: the author and the title.
+        add_author = input("Please enter the author of the book you would like to add:\n")
+        add_title = input("Please enter the title of the book:\n")
+        # The top of the hierarchy is a list, but the thing we want to modify is a sub-list inside it.
+        # The goal is to add a new value in the form of a dictionary. Append can do this without having to specify a new variable.
+        # If there was some reason to keep the original version of the library then I'd keep this as a new variable instead, but
+        # I can't think of one right now, so I will instead just modify it directly.
+        library["books"].append(
+            {
+                "author": add_author,
+                "title": add_title
+            }
+        )
+        print(add_title, "by", add_author, "has been successfully added to", library["name"] + "!\n")
 
     if option == "4":
         print("Removing a book...")
