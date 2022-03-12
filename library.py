@@ -24,7 +24,12 @@ library = {
     ]
 }
 
-# I am defining search functions up top so I can reference them later. The first part of the code to call on this function is "option 2".
+# I am defining various traversal functions up top so I can reference them later.
+# The first part of the code to call on this function is "option 2"; scroll down to see notes on what I'm doing with the code.
+
+no_changes_made = "The library has not been modified. Returning to the main menu.\n"
+# This is purely so I can repeatedly print this message in different scenarios without hardcoding it in repeatedly for no real reason.
+
 def title_search():
     title_search = input("Which title are you looking for?\n")
     # The Library is a dictionary containing two keys, the second of which is a list which in turn contains a list of dictionaries.
@@ -60,21 +65,50 @@ def title_search():
 
 def remove_book():
     search_results = title_search()
-    no_changes_made = "The library has not been modified. Returning to the main menu.\n"
     # I want to make sure that only the specific book the user wants rid of is deleted, so I want to check if the search results
     # exceed one book (since we're deleting only one book from the library).
     if len(search_results) > 1:
         print("More than one book matches your search query. Please try a more specific query.\n")
         print(no_changes_made)
+    # If there is precisely one result, then the user can go ahead and remove it, with confirmation of course:
     elif len(search_results) == 1:
         confirm_match = input("Is this what you'd like to remove? Type \"DELETE\" to confirm deletion, or anything else to go back to the main menu.\n")
         for search_result in search_results:
-            if confirm_match == "CONFIRM":
+            if confirm_match == "DELETE":
                 index_to_remove = library["books"].index(search_result)
                 removed_book = library["books"].pop(index_to_remove)
                 print("\n" + removed_book["title"], "by", removed_book["author"], "has been removed from the library.\n")
             else:
                 print("\nDeletion cancelled.\n")
+                print(no_changes_made)
+    # The only other possibility is that there are no results, in which case a message will be printed from within the search function
+    # to acknowledge this, followed by an additional message confirming that the library hasn't been altered:
+    else:
+        print(no_changes_made)
+    return
+
+def edit_book():
+    # This is very similar to my deletion function except it's replacing a subdictionary by string matching,
+    # rather than removing it by index (I had to get the index before to use ".pop()" but that isn't needed for replacement).
+    search_results = title_search()
+    if len(search_results) > 1:
+        print("More than one book matches your search query. Please try a more specific query.\n")
+        print(no_changes_made)
+    elif len(search_results) == 1:
+        confirm_match = input("Is this the book you'd like to update? Type \"EDIT\" to confirm, or anything else to go back to the main menu.\n")
+        for search_result in search_results:
+            if confirm_match == "EDIT":
+                edit_author = input("Please enter the author as it should appear in the library:\n")
+                edit_title = input("Please enter the title as it should appear in the library:\n")
+                updated_book = {
+                    "author": edit_author,
+                    "title": edit_title
+                }
+                new_booklist = [updated_book if book == search_result else book for book in library["books"]]
+                library["books"] = new_booklist
+                print("\n" + updated_book["title"], "by", updated_book["author"], "has been updated successfully.\n")
+            else:
+                print("\nEdit cancelled.\n")
                 print(no_changes_made)
     else:
         print(no_changes_made)
@@ -99,10 +133,10 @@ while option != "q":
         # If this were an actual real-world application, I'd be refactoring the "books" subdictionary to separate out author surname
         # and forename so that I could then sort by author surname when returning the list of books, but that would be a pretty significant
         # modification to the code provided and might make the instructors' heads hurt (and mine), so I won't do that. Yet.
-        # Instead, I'll just print the "books" sublist as-is:
+        # Instead, I'll just print the "books" sublist (of dictionaries) as is:
         for book in library["books"]:
             print(book["title"], "by", book["author"])
-        print() # This just prints a blank line outside of the for loop for better spacing in the terminal output
+        print() # This just prints a blank line outside of the for loop for better spacing in the terminal output.
 
     if option == "2":
         print("Searching for a book by title...\n")
@@ -131,7 +165,7 @@ while option != "q":
     if option == "4":
         print("Removing a book...\n")
         # TODO - Remove a book
-        # We could do this by index directly, but that'd be kind of a weird way of writing a program like this if it were to be used IRL.
+        # We could just do this by index directly, but that'd be kind of a crap implementation in a real-world application.
         # It's probably better to use the search function from before.
         # This is the main reason I have defined the search code as a function rather than leaving it hardcoded to option 2:
         # otherwise, I'd have to repeat the search code again below.
@@ -139,7 +173,9 @@ while option != "q":
         remove_book()
 
         # In case the user couldn't remember the book title but knew the author, I would ideally like to also add an author search too.
+        # However, I should probably stop working on this and do something else for a while!
 
     if option == "5":
         print("Updating a book...\n")
         # TODO - Update a book
+        edit_book()
