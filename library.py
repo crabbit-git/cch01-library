@@ -64,7 +64,15 @@ while option != "q":
         if title_results != []:
             print("The following title matches were found:")
             for title_result in title_results:
-                print(title_result)
+                # print(title_result)
+                # ... prints only the titles, not the authors, so I want to search the original dictionary for the search results instead
+                # to locate the matched title's list index, then print the values of both keys (author and title) from the sub-dictionaries,
+                # as I did with the "list all" response above.
+                # Luckily, the list comprehension meant that my title results were kept stored as exact matches to the original titles
+                # held in each book's subdictionary, so I can do an "if" statement to check if the titles in the result list match those.
+                for book in library["books"]:
+                    if title_result == book["title"]:
+                        print(book["title"], "by", book["author"])
         else:
             print("Sorry, it doesn't look like we have that at the moment. Our selection is updated periodically, so please check back later!")
         print()
