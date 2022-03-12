@@ -26,6 +26,8 @@ library = {
 
 # I am defining various traversal functions up top so I can reference them later.
 # The first part of the code to call on this function is "option 2"; scroll down to see notes on what I'm doing with the code.
+# I'm considering just turning every option into a function call for consistency's sake, but for the time being,
+# I've only defined functions for the more complex operations and left the simple stuff in the main body of the code.
 
 no_changes_made = "The library has not been modified. Returning to the main menu.\n"
 # This is purely so I can repeatedly print this message in different scenarios without hardcoding it in repeatedly for no real reason.
@@ -51,14 +53,14 @@ def title_search():
             # print(title_result)
             # ... prints only the titles, not the authors, so I want to search the original dictionary for the search results instead
             # to locate the matched title's list index, then print the values of both keys (author and title) from the sub-dictionaries,
-            # as I did with the "list all" response above.
+            # as I did with the "list all" response (option 1).
             # Luckily, the list comprehension meant that my title results were kept stored as exact matches to the original titles
             # held in each book's subdictionary, so I can do an "if" statement to check if the titles in the result list match those.
             for book in library["books"]:
                 if title_result == book["title"]:
                     print(book["title"], "by", book["author"])
                     book_results.append(book)
-        print()
+        print() # This just prints a blank line outside of the for loop for better spacing in the terminal output.
     else:
         print("\nSorry, it doesn't look like we have that at the moment. Our selection is updated periodically, so please check back later!\n")
     return book_results
