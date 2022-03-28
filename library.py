@@ -58,7 +58,7 @@ def title_search():
             # held in each book's subdictionary, so I can do an "if" statement to check if the titles in the result list match those.
             for book in library["books"]:
                 if title_result == book["title"]:
-                    print(book["title"], "by", book["author"])
+                    print(f"{book['title']} by {book['author']}")
                     book_results.append(book)
         print() # This just prints a blank line outside of the for loop for better spacing in the terminal output.
     else:
@@ -79,10 +79,9 @@ def remove_book():
             if confirm_match == "DELETE":
                 index_to_remove = library["books"].index(search_result)
                 removed_book = library["books"].pop(index_to_remove)
-                print("\n" + removed_book["title"], "by", removed_book["author"], "has been removed from the library.\n")
+                print(f"\n{removed_book['title']} by {removed_book['author']} has been removed from the library.\n")
             else:
-                print("\nDeletion cancelled.\n")
-                print(no_changes_made)
+                print(f"\nDeletion cancelled.\n{no_changes_made}")
     # The only other possibility is that there are no results, in which case a message will be printed from within the search function
     # to acknowledge this, followed by an additional message confirming that the library hasn't been altered:
     else:
@@ -94,8 +93,7 @@ def edit_book():
     # rather than removing it by index (I had to get the index before to use ".pop()" but that isn't needed for replacement).
     search_results = title_search()
     if len(search_results) > 1:
-        print("More than one book matches your search query. Please try a more specific query.\n")
-        print(no_changes_made)
+        print(f"More than one book matches your search query. Please try a more specific query.\n{no_changes_made}")
     elif len(search_results) == 1:
         confirm_match = input("Is this the book you'd like to update? Type \"EDIT\" to confirm, or anything else to go back to the main menu.\n")
         for search_result in search_results:
@@ -108,16 +106,15 @@ def edit_book():
                 }
                 new_booklist = [updated_book if book == search_result else book for book in library["books"]]
                 library["books"] = new_booklist
-                print("\n" + updated_book["title"], "by", updated_book["author"], "has been updated successfully.\n")
+                print(f"\n{updated_book['title']} by {updated_book['author']} has been updated successfully.\n")
             else:
-                print("\nEdit cancelled.\n")
-                print(no_changes_made)
+                print(f"\nEdit cancelled.\n{no_changes_made}")
     else:
         print(no_changes_made)
     return
 
 # TODO - Print welcome statement including library name
-print("Welcome to " + library["name"] + "!\n")
+print(f"Welcome to {library['name']}!\n")
 option = ""
 while option != "q":
     print("Options:")
@@ -137,7 +134,7 @@ while option != "q":
         # modification to the code provided and might make the instructors' heads hurt (and mine), so I won't do that. Yet.
         # Instead, I'll just print the "books" sublist (of dictionaries) as is:
         for book in library["books"]:
-            print(book["title"], "by", book["author"])
+            print(f"{book['title']} by {book['author']}")
         print() # This just prints a blank line outside of the for loop for better spacing in the terminal output.
 
     if option == "2":
@@ -162,7 +159,7 @@ while option != "q":
                 "title": add_title
             }
         )
-        print(add_title, "by", add_author, "has been successfully added to", library["name"] + "!\n")
+        print(f"{add_title} by {add_author} has been successfully added to {library['name']}!\n")
 
     if option == "4":
         print("Removing a book...\n")
